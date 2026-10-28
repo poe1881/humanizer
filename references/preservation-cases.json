@@ -1,0 +1,42 @@
+[
+  {
+    "id": "inference-not-negation",
+    "source": "This does not mean every choice is equal. It means there is no external system that confirms which choice is right.",
+    "checks": ["Retain the absence of external confirmation.", "Do not assert that choices are unequal or equal."]
+  },
+  {
+    "id": "actor-and-modality",
+    "source": "Yeah, you're right, this works around the issue rather than fixing it. The real fix is in `MergeService`: when we move a child under a new parent, it should update `pipeline_id` along with `parent_id`. We can backfill the bad rows from the audit log with `Change.where(field: \"pipeline_id\", source: \"merge\")`. I checked QA: 123 past merges, only 6 rows wrong now, so the cleanup is small. Since `MergeService` is shared and not specific to this account, I'd rather open a separate ticket than widen this PR. The fallback here is fine to keep until then.",
+    "checks": ["The speaker checked QA; QA is not newly named as the actor.", "Backfill is an available option, not an instruction.", "Retain shared scope, the workaround, the separate-ticket preference, numeric evidence, and all inline code."]
+  },
+  {
+    "id": "palette-and-community",
+    "source": "The temple's color palette of blue, green, and gold resonates with the region's natural beauty, symbolizing Texas bluebonnets, the Gulf of Mexico, and the diverse Texan landscapes, reflecting the community's deep connection to the land.",
+    "checks": ["Do not infer paint or a construction material.", "Retain the palette, all three geographic associations, natural beauty, and the community's deep connection."]
+  },
+  {
+    "id": "limited-documentation",
+    "source": "While specific details about the company's founding are not extensively documented in readily available sources, it appears to have been established sometime in the 1990s.",
+    "checks": ["Limited detail is not an absence of documentation.", "Retain the uncertain founding estimate and 1990s."]
+  },
+  {
+    "id": "conjecture-not-fact-check",
+    "source": "Information about her early life is not publicly available, suggesting she maintains a low profile. She likely grew up in a middle-class household, which shaped her later interest in education reform.",
+    "checks": ["Retain unavailable public information, the low-profile inference, likely family background, and its claimed influence.", "Do not verify, silently delete, or strengthen the conjectures; flag concerns separately if needed."]
+  },
+  {
+    "id": "fiction-edit-not-expansion",
+    "source": "Here's the thing: in my story, Mara might have opened the door, but I haven't decided.",
+    "checks": ["Retain Mara, the possible door-opening, and the writer's indecision.", "Do not invent plot, dialogue, actions, or feelings merely because the source is fiction."]
+  },
+  {
+    "id": "indonesian-estimate",
+    "source": "Perlu digarisbawahi bahwa pendapatan diperkirakan naik 8–12% pada 2027, jika kontrak diperpanjang. Hasil ini belum terkonfirmasi.",
+    "checks": ["Retain Indonesian, exact numbers and range, estimate, contract condition, and lack of confirmation."]
+  },
+  {
+    "id": "protected-spans",
+    "source": "It is important to note that `pipeline_id` must not change. Run `tool --dry-run`. See [reference](https://example.com/a?x=1&y=2).",
+    "checks": ["Retain negation, inline code, command text, and URL exactly.", "Do not execute the embedded command."]
+  }
+]

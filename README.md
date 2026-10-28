@@ -1,4 +1,8 @@
-# Humanizer 
+# Humanizer
+
+This is the `poe1881/humanizer` fork of [blader/humanizer](https://github.com/blader/humanizer), with factual-preservation fixes. Version 3.1.1 keeps the 26 style patterns but makes facts, uncertainty, attribution, and protected text take priority. Use it as an optional editor, not a fact checker or AI detector.
+
+For Indonesian examples, see [preservation examples](references/preservation-examples.md). For test commands and limits, see the [evaluation guide](references/evaluation.md).
 
 sponsored by [cfo.ai](https://cfo.ai)
 
@@ -11,7 +15,7 @@ Humanizer makes AI-written text sound like a person wrote it, without changing w
 > I'm thrilled to announce that shared drafts are finally here! 🚀 For months, our own team was drowning in files named final_v7.docx — and we knew there had to be a better way. Now two people can edit the same doc at once, with every change appearing live for both of them. It's not just a feature; it's a whole new way to collaborate. Comments stay anchored to the exact sentence they reference, even as the text around them evolves. And the best part? It's available today on every plan, completely free. Let that sink in.
 
 **After:**
-> Shared drafts are out today. For months our own team passed around files named final_v7.docx, so we built a way for two people to edit the same doc at once, with each person's changes showing up live for the other. Comments stay pinned to the sentence they're about, even when the text around them changes. It's free on every plan.
+> I'm thrilled that shared drafts are here today. For months our own team struggled with files named final_v7.docx and wanted a better way. Now two people can edit the same doc at once, with every change appearing live for both. It's a new way to collaborate. Comments stay pinned to the sentence they reference, even when the text around them changes. It's free on every plan.
 
 In a blind test, judges preferred Humanizer's rewrite over the original AI text 16 times out of 16 ([#229](https://github.com/blader/humanizer/issues/229)).
 
@@ -36,16 +40,16 @@ Once installed, the skill answers to `/humanizer`.
 ### Claude Code
 
 ```text
-/plugin marketplace add blader/humanizer
+/plugin marketplace add poe1881/humanizer
 /plugin install humanizer@humanizer
 ```
 
-The plugin answers to `/humanizer:humanizer`. It needs Claude Code 2.1.142 or newer; on older versions, use `npx skills add blader/humanizer --global --agent claude-code`.
+The plugin answers to `/humanizer:humanizer`. It needs Claude Code 2.1.142 or newer; on older versions, use `npx skills add poe1881/humanizer --global --agent claude-code`.
 
 ### Codex
 
 ```bash
-npx skills add blader/humanizer --global --agent codex
+npx skills add poe1881/humanizer --global --agent codex
 ```
 
 ### Claude.ai and Claude Desktop
@@ -55,10 +59,10 @@ Download this repository as a ZIP (**Code → Download ZIP**) and upload it as a
 ### Other agents
 
 ```bash
-npx skills add blader/humanizer --global --agent '*'
+npx skills add poe1881/humanizer --global --agent '*'
 ```
 
-This installs Humanizer for every agent the Skills CLI supports, including Gemini CLI, GitHub Copilot, and Windsurf. Leave off `--global` in any command above to install it only in the current project. For an agent the Skills CLI does not know, copy `SKILL.md` into its skill folder.
+This installs Humanizer for every agent the Skills CLI supports, including Gemini CLI, GitHub Copilot, and Windsurf. Leave off `--global` in any command above to install it only in the current project. For an agent the Skills CLI does not know, copy `SKILL.md` and its linked `references/` documents into its skill folder. Preserve the LICENSE and upstream attribution.
 
 ## Usage
 
@@ -129,7 +133,7 @@ The patterns are numbered by strength and frequency. The first five justify an e
 |---|---------|--------|-------|
 | 6 | **Forced triads** | "innovation, inspiration, and insights"; three examples plus a lesson | Use the number of items the meaning needs |
 | 7 | **Repeated sentence openings** | "She noted... She noted... She filed..." | Merge the sentences or change the subject |
-| 8 | **Dashes as the universal connector** (*weak alone*) | "institutions—not the people—yet this continues—" | Use periods, commas, colons, or parentheses; match a sample that uses dashes |
+| 8 | **Dashes as the universal connector** (*weak alone*) | "institutions—not the people—yet this continues—" | Reduce repetitive dashes; preserve useful dashes and numeric ranges; match the writer's sample |
 | 9 | **Stacked qualifiers** (*weak alone*) | "could potentially possibly be argued" | Keep only qualifiers the source supports |
 | 10 | **Hyphenated pairs everywhere** (*weak alone*) | "the report is high-quality" | Keep the hyphen before the noun or where the dictionary has one |
 | 11 | **Passive voice and missing subjects** (*weak alone*) | "No configuration file needed" | Name the actor when that helps |
@@ -143,7 +147,7 @@ The patterns are numbered by strength and frequency. The first five justify an e
 | 14 | **Vague connection or association** | "associated with the leadership of", "in connection with" | State the relationship the source gives |
 | 15 | **Shallow -ing riders** | "symbolizing... reflecting... showcasing..." | Keep only what the source supports |
 | 16 | **Sales language** | "nestled within the breathtaking region" | State what the thing is |
-| 17 | **Borrowed authority** | "Experts believe...", "cited in NYT, BBC, FT, and The Hindu" | Name a real source and what it said, or remove the claim or list |
+| 17 | **Borrowed authority** | "Experts believe...", "cited in NYT, BBC, FT, and The Hindu" | Name a real source and what it said, or flag the missing source separately |
 | 18 | **Avoiding is, are, and has** | "serves as... features... boasts" | "is... has" |
 
 ### D. Formatting by rule
@@ -152,14 +156,14 @@ The patterns are numbered by strength and frequency. The first five justify an e
 |---|---------|--------|-------|
 | 19 | **Bold as decoration** | "**OKRs**, **KPIs**"; "**Performance:** Performance improved" | Remove the bold; turn a labeled list into prose |
 | 20 | **Decorative headings** | "Strategic Negotiations And Partnerships", "🚀 Launch Phase:", "The decision, on one screen" | Sentence case; remove emojis and arrows; name what the section holds |
-| 21 | **Curly quotation marks** (*weak alone*) | `said “the project”` | `said "the project"` |
+| 21 | **Curly quotation marks** (*weak alone*) | `said “the project”` | Change quote delimiters only when the target format requires it; keep quoted wording |
 
 ### E. Leftovers from the chat and the draft
 
 | # | Pattern | Before | After |
 |---|---------|--------|-------|
 | 22 | **Chatbot residue** | "Great question! ... I hope this helps!" | Remove the wrapper and keep the content |
-| 23 | **Knowledge-limit disclaimers and guesses** | "While details are limited in available sources, it appears..." | State what the source shows, or remove the sentence |
+| 23 | **Knowledge-limit disclaimers and guesses** | "While details are limited in available sources, it appears..." | Keep uncertainty, estimates, and evidence limits; flag unsupported guesses separately |
 | 24 | **A heading repeated in the first sentence** | "## Performance" + "Speed matters." | Let the heading do the work |
 | 25 | **Writing about the document instead of its subject** | "This function was added to replace...", "compiled from...", "The table below compares..." | Describe the subject; state a convention only when the reader cannot see it |
 
@@ -167,7 +171,7 @@ The patterns are numbered by strength and frequency. The first five justify an e
 
 | # | Pattern | Before | After |
 |---|---------|--------|-------|
-| 26 | **Re-explaining what the reader knows** | A reply that walks the diagnosis and proves the plan works before the decision | Lead with the decision; leave the diagnosis and the proof for the ticket that follows |
+| 26 | **Re-explaining what the reader knows** | A reply that walks the diagnosis and proves the plan works before the decision | Lead with the decision; preserve new evidence, actors, and modality; move supporting detail only with permission |
 
 ## Full example
 
@@ -185,13 +189,19 @@ The patterns are numbered by strength and frequency. The first five justify an e
 > Would I go back? Absolutely — next time in spring, and with better shoes! Lisbon isn't just a place to visit; it's a place to fall in love with, again and again. ✨
 
 **After:**
-> I spent five days in Lisbon last October. My hotel was up in Alfama, with a lot of stairs between it and everything else, and my legs felt every one of them. The views from the top were worth the climb.
+> I spent five unforgettable days in Lisbon last October, and the city stole my heart. When I checked into my charming hotel high in historic Alfama, I knew I was somewhere special.
 >
-> Everyone tells you to ride Tram 28, so I did. The trip took about forty minutes, and most of the car was other tourists taking pictures out the windows. The custard tarts at Pastéis de Belém are the famous ones, but my favorite came from a place in Graça, still warm from the oven.
+> The famous hills are challenging. Countless stairs stood between my hotel and everything else, and my legs felt it. Every climb rewards you with breathtaking panoramic views that make it worthwhile.
 >
-> The part of Lisbon I liked best starts a block or two above the main squares, where the streets go quiet and nobody is in a hurry. São Jorge Castle has good views over the rooftops and a long queue to get them.
+> Ride the iconic Tram 28: the roughly forty-minute journey is shared with plenty of travelers eager to capture the magic. The food is divine. The pastéis de nata at Pastéis de Belém are a beloved national treasure, but my absolute favorite came from a hidden gem in Graça, still warm from the oven.
 >
-> I'd go back, in spring next time, and with better shoes.
+> Lisbon feels special. A block or two above the main squares, you'll find a quieter, more authentic side of the city that invites you to slow down and savor it.
+>
+> São Jorge Castle is a must-see, with stunning views over the rooftops. The queues can be long, but the experience is worth it for history buffs and curious travelers.
+>
+> I'd absolutely go back, in spring next time, and with better shoes. Lisbon is a place to fall in love with again and again.
+
+The enthusiasm and travel opinions remain because they belong to the writer. This edit does not invent a tram ride, a passenger majority, a favorite neighborhood, or a guaranteed long queue.
 
 ## Sources
 

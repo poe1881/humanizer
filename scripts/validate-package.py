@@ -99,19 +99,21 @@ if len(package_descriptions) != 1 or not skill_description.startswith(
         f"{sorted(package_descriptions)}"
     )
 
-skill_patterns = dict(
-    (int(number), name)
-    for number, name in re.findall(r"(?m)^### ([0-9]+)\. (.+)$", SKILL)
-)
+skill_entries = re.findall(r"(?m)^### ([0-9]+)\. (.+)$", SKILL)
+skill_numbers = [int(number) for number, _ in skill_entries]
+if len(skill_numbers) != len(set(skill_numbers)):
+    raise SystemExit("Duplicate SKILL.md pattern number; use each number once")
+skill_patterns = {int(number): name for number, name in skill_entries}
 pattern_numbers = list(skill_patterns)
 pattern_count = len(pattern_numbers)
 if pattern_count == 0 or pattern_numbers != list(range(1, pattern_count + 1)):
     raise SystemExit(f"Number SKILL.md patterns from 1 upward without gaps: {pattern_numbers}")
 
-readme_patterns = dict(
-    (int(number), name)
-    for number, name in re.findall(r"(?m)^\| ([0-9]+) \| \*\*(.+?)\*\*", README)
-)
+readme_entries = re.findall(r"(?m)^\| ([0-9]+) \| \*\*(.+?)\*\*", README)
+readme_numbers = [int(number) for number, _ in readme_entries]
+if len(readme_numbers) != len(set(readme_numbers)):
+    raise SystemExit("Duplicate README.md pattern number; use each number once")
+readme_patterns = {int(number): name for number, name in readme_entries}
 if sorted(readme_patterns) != pattern_numbers:
     raise SystemExit(
         f"List patterns 1 through {pattern_count} once each in the README tables: {sorted(readme_patterns)}"
@@ -137,6 +139,11 @@ if missing_patterns:
         f"Point every SKILL.md section reference at a pattern from 1 to "
         f"{pattern_count}: {missing_patterns}"
     )
+
+for target in re.findall(r"\]\((references/[^\s)]+)\)", SKILL):
+    reference = ROOT / target.split("#", 1)[0]
+    if not reference.is_file():
+        raise SystemExit(f"Missing linked reference: {target}")
 
 # Every word of SKILL.md is read on each use, so the budget is in words.
 skill_words = len(SKILL.split())

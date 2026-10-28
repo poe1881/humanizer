@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.1.1
+
+- poe1881 fork: factual preservation overrides style edits; preserve numeric bounds, uncertainty, attribution, quotations, and protected spans.
+- Fixed examples that invented research, technical details, feelings, or factual precision, and retained factual lists and reply evidence.
+- Replaced the blanket dash ban and authorship date claim with context-sensitive editing guidance.
+- Added Indonesian preservation examples and a reproducible evaluation guide.
+- Review follow-up: preserve inference boundaries, actors, action modality, substantive guesses, and personal voice; reconcile README examples and rules. Validate linked reference files and add semantic evaluation cases.
+- Reject duplicate pattern numbers in SKILL.md and README before dictionary conversion; add regression tests and run them in CI.
+- Point fork install commands and plugin repository links to poe1881/humanizer; retain upstream credit and MIT license.
+
 ## 3.1.0
 
 - Added pattern #26 and section F for replies that re-explain context the reader already has (#269). It acts on replies, not standalone writing. 26 patterns total.
